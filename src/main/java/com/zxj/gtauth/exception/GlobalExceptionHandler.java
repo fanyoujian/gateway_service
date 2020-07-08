@@ -1,8 +1,6 @@
 package com.zxj.gtauth.exception;
 
 import com.sun.corba.se.impl.io.TypeMismatchException;
-import com.sun.org.slf4j.internal.Logger;
-import com.sun.org.slf4j.internal.LoggerFactory;
 import com.zxj.gtauth.tool.JsonResult;
 import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -27,7 +25,6 @@ public class GlobalExceptionHandler {
 
 
     private static final String logExceptionFormat = "Capture Exception By GlobalExceptionHandler: Code: %s Detail: %s";
-    private static Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     //运行时异常
     @ExceptionHandler(RuntimeException.class)
@@ -37,7 +34,7 @@ public class GlobalExceptionHandler {
 
     //空指针异常
     @ExceptionHandler(NullPointerException.class)
-    public String nullPointerExceptionHandler(NullPointerException ex) {
+    public String nullPointerExceptionHandLoggerFactorler(NullPointerException ex) {
         System.err.println("NullPointerException:");
         return resultFormat(2, ex);
     }
@@ -128,7 +125,7 @@ public class GlobalExceptionHandler {
 
     private <T extends Throwable> String resultFormat(Integer code, T ex) {
         ex.printStackTrace();
-        log.error(String.format(logExceptionFormat, code, ex.getMessage()));
+//        log.error(String.format(logExceptionFormat, code, ex.getMessage()));
         return JsonResult.failed(code, ex.getMessage());
     }
 

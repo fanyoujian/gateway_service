@@ -1,6 +1,6 @@
 package com.zxj.gtauth.tool;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
 import java.text.SimpleDateFormat;

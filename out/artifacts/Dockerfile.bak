@@ -1,0 +1,4 @@
+FROM frolvlad/alpine-java:latest
+VOLUME /gateway
+ADD *.jar /gateway/
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/gateway/gtauth.jar"]

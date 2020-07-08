@@ -3,8 +3,6 @@ package com.zxj.gtauth.filter;
 import com.alibaba.fastjson.JSONObject;
 import com.zxj.gtauth.tool.Sign;
 import com.zxj.gtauth.tool.Tool;
-import com.sun.org.slf4j.internal.Logger;
-import com.sun.org.slf4j.internal.LoggerFactory;
 
 import io.netty.buffer.ByteBufAllocator;
 
@@ -15,6 +13,7 @@ import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.core.io.buffer.NettyDataBufferFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
+import org.springframework.http.server.reactive.ServerHttpRequestDecorator;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -28,7 +27,7 @@ import java.util.regex.Pattern;
  * 自定义路由器 特定路由过滤
  */
 public class CustomerFilterFactory extends AbstractGatewayFilterFactory<CustomerFilterFactory.Config> {
-    private static final Logger log = LoggerFactory.getLogger( CustomerFilterFactory.class );
+
     private static final String COUNT_START_TIME = "countStartTime";
     private static final String CODE="code";
     private static final String PLATFORM = "platform";
@@ -46,7 +45,7 @@ public class CustomerFilterFactory extends AbstractGatewayFilterFactory<Customer
     @Override
     public GatewayFilter apply(Config config) {
         return (exchange, chain) -> {
-
+            System.out.println("==========Customer GatewayFilter start=====");
             //请求参数 和 对应的 url 路径 写入日志
             ServerHttpRequest request = exchange.getRequest();
             System.out.println("URL : " + request.getURI());
@@ -59,15 +58,42 @@ public class CustomerFilterFactory extends AbstractGatewayFilterFactory<Customer
                 System.out.println("==========body====="+ param);
             }
             String fileName = Tool.sysDayTime()+".txt";
-            Tool.writeLog("http request url:"+request.getURI().toString(),fileName);
-            Tool.writeLog("http request header:"+request.getHeaders().toString(),fileName);
-            Tool.writeLog("http request body:"+param,fileName);
+            System.out.println("==========writeLog start====="+ fileName);
+            try{
+                Tool.writeLog("http request url:"+request.getURI().toString(),fileName);
+                Tool.writeLog("http request header:"+request.getHeaders().toString(),fileName);
+                Tool.writeLog("http request body:"+param,fileName);
 
-            return chain.filter(exchange);
+
+            }catch (Exception e)
+            {
+                System.out.println("==========writeLog try catch err====="+ e.getMessage());
+
+            }
+            System.out.println("==========writeLog end====="+ fileName);
+            System.out.println("============apply config isEnable=========="+config.isEnabled());
+//            return chain.filter(exchange);
+
+            if (exchange.getRequest().getHeaders().getContentType() == null) {
+                return chain.filter(exchange);
+            } else {
+                return DataBufferUtils.join(exchange.getRequest().getBody())
+                        .flatMap(dataBuffer -> {
+                            DataBufferUtils.retain(dataBuffer);
+                            Flux<DataBuffer> cachedFlux = Flux
+                                    .defer(() -> Flux.just(dataBuffer.slice(0, dataBuffer.readableByteCount())));
+                            ServerHttpRequest mutatedRequest = new ServerHttpRequestDecorator(
+                                    exchange.getRequest()) {
+                                @Override
+                                public Flux<DataBuffer> getBody() {
+                                    return cachedFlux;
+                                }
+                            };
+                            return chain.filter(exchange.mutate().request(mutatedRequest).build());
+                        });
+            }
 
 
-//            System.out.println("============apply config isEnable=========="+config.isEnabled());
-//
 //            if (!config.isEnabled()) {
 //                return chain.filter(exchange);
 //            }
@@ -118,7 +144,7 @@ public class CustomerFilterFactory extends AbstractGatewayFilterFactory<Customer
 //                System.out.println(bodyStr);
 //                //根据 form-data or x-www-form-urlencode 进行解析
 //                // x-www-form-urlencode
-//                if(contentType.isCompatibleWith(MediaType.APPLICATION_FORM_URLENCODED))
+//                if(contentType.isCompatibleWith(.APPLICATION_FORM_URLENCODMediaTypeED))
 //                {
 //                    try {
 //                        if(!validSign(postUrlParam(bodyStr)))

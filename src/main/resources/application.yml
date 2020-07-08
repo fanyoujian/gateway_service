@@ -1,13 +1,40 @@
+dev1:
+  uri: https://dev1.51zixiu.com:9080/
+dev2:
+  uri: https://dev2.51zixiu.com:9080/
+dev3:
+  uri: https://dev3.51zixiu.com:9080/
+dev4:
+  uri: https://dev4.51zixiu.com:9080/
+op:
+  uri: https://op.51zixiu.com:9080/
+condev1:
+  uri: https://condev1.51zixiu.com:9080/
+condev2:
+  uri: https://condev2.51zixiu.com:9080/
+condev3:
+  uri: https://condev3.51zixiu.com:9080/
+condev4:
+  uri: https://condev4.51zixiu.com:9080/
+conop:
+  uri: https://conop.51zixiu.com:9080/
+#master dev
+appdev:
+  uri: https://app.51zixiu.com:9080/
+#online dev
+onlinedev:
+  uri: https://beta.51zixiu.com:9080/
+
+
 server:
   port: 9098
 spring:
   application:
     name: sign-service
-  #redis:
-  #  host: localhost
-  #  port: 6379
-  #  database: 0
-  #  timeout: 20
+  redis:
+    host: localhost
+    port: 6379
+    database: 0
   cloud:
     gateway:
       routes:
@@ -18,16 +45,106 @@ spring:
           filters:
             - StripPrefix=1
             - CustomerFilterFactory=true
-            #- name: RequestRateLimiter
-            #  args:
-            #    redis-rate-limiter.replenishRate: 5
-            #    redis-rate-limiter.burstCapacity: 10
-            #    key-resolver: "#{@apiKeyResolver}"
+
+        - id: route-csdn
+          uri: https://blog.csdn.net/
+          predicates:
+            - Path=/csdn/**
+
+        - id: route-dev3
+          uri: ${dev3.uri}
+          predicates:
+            - Host=dev3.**
+          filters:
+            - CustomerFilterFactory=true
+
+        - id: route-devdd
+          uri: http://zxj.com:8081/
+          predicates:
+            - Host=zxj.**
+          filters:
+            - CustomerFilterFactory=true
+
+        - id: route-dev1
+          uri: ${dev1.uri}
+          predicates:
+            - Host=dev1.**
+          filters:
+            - CustomerFilterFactory=true
+
+        - id: route-dev2
+          uri: ${dev2.uri}
+          predicates:
+            - Host=dev2.**
+          filters:
+            - CustomerFilterFactory=true
+
+        - id: route-dev4
+          uri: ${dev4.uri}
+          predicates:
+            - Host=dev4.**
+          filters:
+            - CustomerFilterFactory=true
+
+        - id: route-condev1
+          uri: ${condev1.uri}
+          predicates:
+            - Host=condev1.**
+          filters:
+            - CustomerFilterFactory=true
+
+        - id: route-condev2
+          uri: ${condev2.uri}
+          predicates:
+            - Host=condev2.**
+          filters:
+            - CustomerFilterFactory=true
+
+        - id: route-condev3
+          uri: ${condev3.uri}
+          predicates:
+            - Host=condev3.**
+          filters:
+            - CustomerFilterFactory=true
+
+        - id: route-condev4
+          uri: ${condev4.uri}
+          predicates:
+            - Host=condev4.**
+          filters:
+            - CustomerFilterFactory=true
+
+
+        - id: route-master
+          uri: ${appdev.uri}
+          predicates:
+            - Host=app.**
+          filters:
+            - CustomerFilterFactory=true
+        - id: route-online
+          uri: ${onlinedev.uri}
+          predicates:
+            - Host=beta.**
+          filters:
+            - CustomerFilterFactory=true
+
+        - id: route-conlocal
+          uri: ${conop.uri}
+          predicates:
+            - Host=conop.**
+          filters:
+            - CustomerFilterFactory=true
 
         - id: route-zxj
-          uri: http://www.zxj.com/
+          uri: http://www.zxj.com:8081/
           predicates:
             - Path=/zxj/**
           filters:
             - RewritePath=/zxj/(?<segment>.*), /$\{segment}
             - CustomerFilterFactory=true
+logging:
+  level:
+    org.springframework.cloud.gateway: TRACE
+    org.springframework.http.server.reactive: DEBUG
+    org.springframework.web.reactive: DEBUG
+    reactor.ipc.netty: DEBUG
