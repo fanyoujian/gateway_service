@@ -2,8 +2,10 @@ package com.zxj.gtauth.filter;
 
 
 import com.alibaba.fastjson.JSONObject;
+import com.zxj.gtauth.constant.LogConstant;
 import com.zxj.gtauth.tool.Tool;
 import org.reactivestreams.Publisher;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
@@ -31,7 +33,8 @@ import java.util.List;
 @Component
 public class ResponseGlobalFilter implements GlobalFilter, Ordered {
 
-    private static final String LogDir = "logs/";
+    @Autowired
+    private LogConstant lC;
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
@@ -86,7 +89,7 @@ public class ResponseGlobalFilter implements GlobalFilter, Ordered {
                   //responseData就是下游系统返回的内容,可以查看修改 必须是json 格式
                   String responseData = new String(content, Charset.forName("UTF-8"));
 
-                  Tool.writeDirLog("http response : "+responseData,Tool.sysDayTime()+".txt",LogDir);
+                  Tool.writeDirLog("http response : "+responseData,Tool.sysDayTime()+".txt",lC.getLogDir());
                   // 获取对应的 data 数据 进行加密 返回
                   JSONObject object = JSONObject.parseObject(responseData);
 //                  String data = object.getString("data");

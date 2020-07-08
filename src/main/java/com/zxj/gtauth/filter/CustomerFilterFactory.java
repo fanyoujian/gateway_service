@@ -1,11 +1,13 @@
 package com.zxj.gtauth.filter;
 
 import com.alibaba.fastjson.JSONObject;
+import com.zxj.gtauth.constant.LogConstant;
 import com.zxj.gtauth.tool.Sign;
 import com.zxj.gtauth.tool.Tool;
 
 import io.netty.buffer.ByteBufAllocator;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.core.io.buffer.DataBuffer;
@@ -31,7 +33,8 @@ public class CustomerFilterFactory extends AbstractGatewayFilterFactory<Customer
     private static final String COUNT_START_TIME = "countStartTime";
     private static final String CODE="code";
     private static final String PLATFORM = "platform";
-    private static final String LogDir = "logs/";
+    @Autowired
+    private LogConstant lC;
 
     @Override
     public List<String> shortcutFieldOrder() {
@@ -61,9 +64,9 @@ public class CustomerFilterFactory extends AbstractGatewayFilterFactory<Customer
             String fileName = Tool.sysDayTime()+".txt";
             System.out.println("==========writeLog start====="+ fileName);
             try{
-                Tool.writeDirLog("http request url:"+request.getURI().toString(),fileName,LogDir);
-                Tool.writeDirLog("http request header:"+request.getHeaders().toString(),fileName,LogDir);
-                Tool.writeDirLog("http request body:"+param,fileName,LogDir);
+                Tool.writeDirLog("http request url:"+request.getURI().toString(),fileName,lC.getLogDir());
+                Tool.writeDirLog("http request header:"+request.getHeaders().toString(),fileName,lC.getLogDir());
+                Tool.writeDirLog("http request body:"+param,fileName,lC.getLogDir());
 
 
             }catch (Exception e)
