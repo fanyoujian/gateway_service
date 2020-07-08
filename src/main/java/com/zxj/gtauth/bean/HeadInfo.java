@@ -1,4 +1,4 @@
-package com.zxj.signauth.bean;
+package com.zxj.gtauth.bean;
 
 /**
  * Header 传输实体类

@@ -1,4 +1,4 @@
-package com.zxj.signauth.bean;
+package com.zxj.gtauth.bean;
 
 public class Result {
     //状态码

@@ -1,4 +1,4 @@
-package com.zxj.signauth.bean;
+package com.zxj.gtauth.bean;
 
 /**
  * auth 认证实体类

@@ -10,10 +10,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author 倾宸
- * @date 2019/6/24 16:13
+ * @author 樊佑剑
+ * @date 2020/7/8
+ * lombok 代码简化工具 setter getter 可以替换手动创建 set get 方法
  */
-
 @Setter
 @Getter
 @ToString
