@@ -31,6 +31,7 @@ public class CustomerFilterFactory extends AbstractGatewayFilterFactory<Customer
     private static final String COUNT_START_TIME = "countStartTime";
     private static final String CODE="code";
     private static final String PLATFORM = "platform";
+    private static final String LogDir = "logs/";
 
     @Override
     public List<String> shortcutFieldOrder() {
@@ -60,9 +61,9 @@ public class CustomerFilterFactory extends AbstractGatewayFilterFactory<Customer
             String fileName = Tool.sysDayTime()+".txt";
             System.out.println("==========writeLog start====="+ fileName);
             try{
-                Tool.writeLog("http request url:"+request.getURI().toString(),fileName);
-                Tool.writeLog("http request header:"+request.getHeaders().toString(),fileName);
-                Tool.writeLog("http request body:"+param,fileName);
+                Tool.writeDirLog("http request url:"+request.getURI().toString(),fileName,LogDir);
+                Tool.writeDirLog("http request header:"+request.getHeaders().toString(),fileName,LogDir);
+                Tool.writeDirLog("http request body:"+param,fileName,LogDir);
 
 
             }catch (Exception e)

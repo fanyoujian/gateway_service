@@ -30,6 +30,9 @@ import java.util.List;
  */
 @Component
 public class ResponseGlobalFilter implements GlobalFilter, Ordered {
+
+    private static final String LogDir = "logs/";
+
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpResponse originalResponse = exchange.getResponse();
@@ -83,7 +86,7 @@ public class ResponseGlobalFilter implements GlobalFilter, Ordered {
                   //responseData就是下游系统返回的内容,可以查看修改 必须是json 格式
                   String responseData = new String(content, Charset.forName("UTF-8"));
 
-                  Tool.writeLog("http response : "+responseData,Tool.sysDayTime()+".txt");
+                  Tool.writeDirLog("http response : "+responseData,Tool.sysDayTime()+".txt",LogDir);
                   // 获取对应的 data 数据 进行加密 返回
                   JSONObject object = JSONObject.parseObject(responseData);
 //                  String data = object.getString("data");

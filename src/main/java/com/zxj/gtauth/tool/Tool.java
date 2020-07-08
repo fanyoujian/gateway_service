@@ -78,11 +78,20 @@ public class Tool {
      */
     public static String writeLog(String str,String fileName) {
 
+        System.out.println("===============writeLog=========");
+
        try{
            String line = System.getProperty("line.separator");
 
+           System.out.println(fileName);
            File file = new File(fileName);
-           if(!file.exists())file.createNewFile();
+
+           if(!file.exists())
+           {
+
+               System.out.println("===============writeLog is not=========");
+               file.createNewFile();
+           }
 
            OutputStreamWriter oStreamWriter = new OutputStreamWriter(new FileOutputStream(file,true), "utf-8");
            oStreamWriter.append(str+line);
@@ -101,10 +110,31 @@ public class Tool {
 //           fileWriter.close();
        }catch (Exception e)
        {
+           System.out.println("===============writeLog is not========="+e.getMessage());
            return e.getMessage();
        }
        return "success";
     }
+
+    public static String writeDirLog(String str,String fileName,String dir) {
+
+        System.out.println("===============writeLog=========");
+        try{
+            File fileDir = new File(dir);
+            if(!fileDir.exists() && !fileDir.isDirectory())
+            {
+                System.out.println("===============writeLog is not=========");
+                fileDir.mkdirs();
+            }
+            writeLog(str,dir+fileName);
+        }catch (Exception e)
+        {
+            System.out.println("===============writeLog is not========="+e.getMessage());
+            return e.getMessage();
+        }
+        return "success";
+    }
+
 
     /**
      * 获取系统时间 精确到当天

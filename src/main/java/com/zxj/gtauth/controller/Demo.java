@@ -9,6 +9,8 @@ import java.io.IOException;
 @RestController
 public class Demo {
 
+    private static final String LogDir = "logs/";
+
     @RequestMapping("hello")
     public String hello()
     {
@@ -18,7 +20,7 @@ public class Demo {
     @RequestMapping("file")
     public String file() throws IOException {
 
-        String saveFile = Tool.writeLog("cdcdcdcd",Tool.sysDayTime()+".txt");
+        String saveFile = Tool.writeDirLog("cdcdcdcd",Tool.sysDayTime()+".txt",LogDir);
 
         return  saveFile;
     }
