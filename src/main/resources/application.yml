@@ -4,20 +4,12 @@ dev2:
   uri: https://dev2.51zixiu.com:9080/
 dev3:
   uri: https://dev3.51zixiu.com:9080/
-dev4:
-  uri: https://dev4.51zixiu.com:9080/
-op:
-  uri: https://op.51zixiu.com:9080/
 condev1:
   uri: https://condev1.51zixiu.com:9080/
 condev2:
   uri: https://condev2.51zixiu.com:9080/
 condev3:
   uri: https://condev3.51zixiu.com:9080/
-condev4:
-  uri: https://condev4.51zixiu.com:9080/
-conop:
-  uri: https://conop.51zixiu.com:9080/
 #master dev
 appdev:
   uri: https://app.51zixiu.com:9080/
@@ -38,33 +30,8 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: route-customer
-          uri: http://127.0.0.1:9045/
-          predicates:
-            - Path=/cus/**
-          filters:
-            - StripPrefix=1
-            - CustomerFilterFactory=true
 
-        - id: route-csdn
-          uri: https://blog.csdn.net/
-          predicates:
-            - Path=/csdn/**
-
-        - id: route-dev3
-          uri: ${dev3.uri}
-          predicates:
-            - Host=dev3.**
-          filters:
-            - CustomerFilterFactory=true
-
-        - id: route-devdd
-          uri: http://zxj.com:8081/
-          predicates:
-            - Host=zxj.**
-          filters:
-            - CustomerFilterFactory=true
-
+        #======================= online and test dev route gateway start==================================
         - id: route-dev1
           uri: ${dev1.uri}
           predicates:
@@ -79,10 +46,10 @@ spring:
           filters:
             - CustomerFilterFactory=true
 
-        - id: route-dev4
-          uri: ${dev4.uri}
+        - id: route-dev3
+          uri: ${dev3.uri}
           predicates:
-            - Host=dev4.**
+            - Host=dev3.**
           filters:
             - CustomerFilterFactory=true
 
@@ -107,14 +74,6 @@ spring:
           filters:
             - CustomerFilterFactory=true
 
-        - id: route-condev4
-          uri: ${condev4.uri}
-          predicates:
-            - Host=condev4.**
-          filters:
-            - CustomerFilterFactory=true
-
-
         - id: route-master
           uri: ${appdev.uri}
           predicates:
@@ -128,13 +87,18 @@ spring:
           filters:
             - CustomerFilterFactory=true
 
-        - id: route-conlocal
-          uri: ${conop.uri}
-          predicates:
-            - Host=conop.**
-          filters:
-            - CustomerFilterFactory=true
+        #======================= online and test dev route gateway end==================================
 
+        #======================= localhost test dev , online is ignore start ==================================
+        # local dev 1
+        - id: route-customer
+          uri: http://127.0.0.1:9045/
+          predicates:
+            - Path=/cus/**
+          filters:
+            - StripPrefix=1
+            - CustomerFilterFactory=true
+        # local dev 2
         - id: route-zxj
           uri: http://www.zxj.com:8081/
           predicates:
@@ -142,6 +106,7 @@ spring:
           filters:
             - RewritePath=/zxj/(?<segment>.*), /$\{segment}
             - CustomerFilterFactory=true
+        #======================= localhost test dev , online is ignore  end ==================================
 logging:
   level:
     org.springframework.cloud.gateway: TRACE

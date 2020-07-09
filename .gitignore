@@ -7,6 +7,8 @@ out
 logs
 .txt
 .mvn
+nohup.out
+.sh
 
 ### STS ###
 .apt_generated

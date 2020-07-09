@@ -35,7 +35,8 @@ public class Demo {
     @RequestMapping("log")
     public String logProperties()
     {
+        return "dev logs 121331 dev";
 //        LogConstant lC = new LogConstant();
-        return lC.getLogDir();
+//        return lC.getLogDir();
     }
 }
