@@ -18,6 +18,8 @@ public abstract class AbstractExceptionHandler {
     private static final String DEFAULT_ERROR_CODE = "999999";
 
     protected String formatMessage(Throwable ex) {
+
+        System.out.println("=======AbstractExceptionHandler========"+ex.getMessage());
         String errorMessage = null;
         if (ex instanceof NotFoundException) {
             String reason = ((NotFoundException) ex).getMessage();

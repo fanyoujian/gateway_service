@@ -76,63 +76,35 @@ public class Tool {
      * @param fileName
      * @throws IOException
      */
-    public static String writeLog(String str,String fileName) {
+    public static void writeLog(String str,String fileName) throws IOException {
 
-        System.out.println("===============writeLog=========");
 
-       try{
-           String line = System.getProperty("line.separator");
+        String line = System.getProperty("line.separator");
 
-           System.out.println(fileName);
-           File file = new File(fileName);
+        System.out.println(fileName);
+        File file = new File(fileName);
 
-           if(!file.exists())
-           {
+        if(!file.exists())
+        {
 
-               System.out.println("===============writeLog is not=========");
-               file.createNewFile();
-           }
+            System.out.println("===============writeLog is not=========");
+            file.createNewFile();
+        }
 
-           OutputStreamWriter oStreamWriter = new OutputStreamWriter(new FileOutputStream(file,true), "utf-8");
-           oStreamWriter.append(str+line);
-           oStreamWriter.close();
-
-//           FileOutputStream fos = new FileOutputStream(file,true);  // true:表示追加。  默认覆盖
-//           fos.write((str+line).getBytes());  // \r\n 表示换行。
-//           fos.close();
-
-//           Writer writer = new BufferedWriter( new OutputStreamWriter(new FileOutputStream(fileName), "UTF-8"));
-//
-//           writer.write(str+line);
-//           FileWriter fileWriter = new FileWriter(file.getName(),true);
-//           fileWriter.write(str+line);
-//
-//           fileWriter.close();
-       }catch (Exception e)
-       {
-           System.out.println("===============writeLog is not========="+e.getMessage());
-           return e.getMessage();
-       }
-       return "success";
+        OutputStreamWriter oStreamWriter = new OutputStreamWriter(new FileOutputStream(file,true), "utf-8");
+        oStreamWriter.append(str+line);
+        oStreamWriter.close();
     }
 
-    public static String writeDirLog(String str,String fileName,String dir) {
+    public static void writeDirLog(String str, String fileName, String dir) throws IOException {
 
-        System.out.println("===============writeLog=========");
-        try{
-            File fileDir = new File(dir);
-            if(!fileDir.exists() && !fileDir.isDirectory())
-            {
-                System.out.println("===============writeLog is not=========");
-                fileDir.mkdirs();
-            }
-            writeLog(str,dir+fileName);
-        }catch (Exception e)
+        File fileDir = new File(dir);
+        if(!fileDir.exists() && !fileDir.isDirectory())
         {
-            System.out.println("===============writeLog is not========="+e.getMessage());
-            return e.getMessage();
+            System.out.println("===============writeLog is not=========");
+            fileDir.mkdirs();
         }
-        return "success";
+        writeLog(str,dir+fileName);
     }
 
 

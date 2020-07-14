@@ -1,18 +1,33 @@
 package com.zxj.gtauth.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.gateway.filter.ratelimit.KeyResolver;
-import org.springframework.cloud.gateway.filter.ratelimit.RedisRateLimiter;
-import org.springframework.cloud.gateway.route.RouteLocator;
-import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.web.filter.reactive.HiddenHttpMethodFilter;
+import org.springframework.web.server.ServerWebExchange;
+import org.springframework.web.server.WebFilterChain;
+import reactor.core.publisher.Mono;
+
 
 @Configuration
 /**
  * 自定义路由实现 也可以根据 yml 配置文件实现
  */
 public class RoutesConfig {
+
+    @Bean
+    public HiddenHttpMethodFilter hiddenHttpMethodFilter() {
+
+        System.out.println("===========HiddenHttpMethodFilter start========");
+        return new HiddenHttpMethodFilter() {
+            @Override
+            public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
+
+                System.out.println("===========HiddenHttpMethodFilter chain.filter========");
+                return chain.filter(exchange);
+            }
+        };
+    }
 //    @Autowired
 //    private KeyResolver addressKeyResolver;
 //

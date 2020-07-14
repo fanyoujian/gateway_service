@@ -10,13 +10,18 @@ import io.netty.buffer.ByteBufAllocator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
+import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.core.io.buffer.NettyDataBufferFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpRequestDecorator;
 import org.springframework.http.server.reactive.ServerHttpResponse;
+import org.springframework.web.filter.reactive.HiddenHttpMethodFilter;
+import org.springframework.web.server.ServerWebExchange;
+import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -55,6 +60,7 @@ public class CustomerFilterFactory extends AbstractGatewayFilterFactory<Customer
             System.out.println("URL : " + request.getURI());
             System.out.println("header : " + request.getHeaders());
 
+            System.out.println("==========body start=====");
             String param = "";
             if(request.getBody()!=null)
             {
@@ -67,8 +73,6 @@ public class CustomerFilterFactory extends AbstractGatewayFilterFactory<Customer
                 Tool.writeDirLog("http request url:"+request.getURI().toString(),fileName,lC.getLogDir());
                 Tool.writeDirLog("http request header:"+request.getHeaders().toString(),fileName,lC.getLogDir());
                 Tool.writeDirLog("http request body:"+param,fileName,lC.getLogDir());
-
-
             }catch (Exception e)
             {
                 System.out.println("==========writeLog try catch err====="+ e.getMessage());
@@ -76,26 +80,27 @@ public class CustomerFilterFactory extends AbstractGatewayFilterFactory<Customer
             }
             System.out.println("==========writeLog end====="+ fileName);
             System.out.println("============apply config isEnable=========="+config.isEnabled());
-//            return chain.filter(exchange);
+            return chain.filter(exchange);
 
-            if (exchange.getRequest().getHeaders().getContentType() == null) {
-                return chain.filter(exchange);
-            } else {
-                return DataBufferUtils.join(exchange.getRequest().getBody())
-                        .flatMap(dataBuffer -> {
-                            DataBufferUtils.retain(dataBuffer);
-                            Flux<DataBuffer> cachedFlux = Flux
-                                    .defer(() -> Flux.just(dataBuffer.slice(0, dataBuffer.readableByteCount())));
-                            ServerHttpRequest mutatedRequest = new ServerHttpRequestDecorator(
-                                    exchange.getRequest()) {
-                                @Override
-                                public Flux<DataBuffer> getBody() {
-                                    return cachedFlux;
-                                }
-                            };
-                            return chain.filter(exchange.mutate().request(mutatedRequest).build());
-                        });
-            }
+//            HttpHeaders httpHeaders = request.getHeaders();
+//            if (httpHeaders.getContentType() == null || httpHeaders.getContentLength()<1) {
+//                return chain.filter(exchange);
+//            } else {
+//                return DataBufferUtils.join(exchange.getRequest().getBody())
+//                        .flatMap(dataBuffer -> {
+//                            DataBufferUtils.retain(dataBuffer);
+//                            Flux<DataBuffer> cachedFlux = Flux
+//                                    .defer(() -> Flux.just(dataBuffer.slice(0, dataBuffer.readableByteCount())));
+//                            ServerHttpRequest mutatedRequest = new ServerHttpRequestDecorator(
+//                                    exchange.getRequest()) {
+//                                @Override
+//                                public Flux<DataBuffer> getBody() {
+//                                    return cachedFlux;
+//                                }
+//                            };
+//                            return chain.filter(exchange.mutate().request(mutatedRequest).build());
+//                        });
+//            }
 
 
 //            if (!config.isEnabled()) {

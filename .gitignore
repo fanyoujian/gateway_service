@@ -5,6 +5,7 @@ target/
 !**/src/test/**
 out
 logs
+logs2
 .txt
 .mvn
 nohup.out

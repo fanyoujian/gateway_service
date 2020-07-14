@@ -66,6 +66,8 @@ public class GatewayExceptionHandler extends AbstractExceptionHandler implements
     @Override
     public Mono<Void> handle(ServerWebExchange exchange, Throwable ex) {
         String errorMessage = super.formatMessage(ex);
+        System.out.println("=================errorMessage======"+errorMessage);
+
         if (errorMessage.equals(JHJCN_BUSI_NOT_FOUND)) {
             errorMessage = JHJCN_BUSI_NOT_FOUND_ZH;
         }

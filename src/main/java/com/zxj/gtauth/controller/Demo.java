@@ -26,11 +26,17 @@ public class Demo {
     }
 
     @RequestMapping("file")
-    public String file() throws IOException {
-
-        String saveFile = Tool.writeDirLog("cdcdcdcd",Tool.sysDayTime()+".txt",LogDir);
-
-        return  saveFile;
+    public String file() {
+        System.out.println("======demo file======="+lC.getLogDir());
+       try{
+         Tool.writeDirLog("ddddd",Tool.sysDayTime()+".txt",lC.getLogDir());
+//
+           return  "";
+       }catch (Exception e)
+       {
+           System.out.println("======demo file try catch======="+e.getMessage());
+           return e.getMessage();
+       }
     }
     @RequestMapping("log")
     public String logProperties()
