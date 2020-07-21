@@ -4,6 +4,7 @@ import com.zxj.gtauth.constant.LogConstant;
 import com.zxj.gtauth.tool.Tool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -44,5 +45,10 @@ public class Demo {
         return "dev logs 121331 dev";
 //        LogConstant lC = new LogConstant();
 //        return lC.getLogDir();
+    }
+    @RequestMapping("/json")
+    public String jsonDemo()
+    {
+        return  "Json Demo";
     }
 }

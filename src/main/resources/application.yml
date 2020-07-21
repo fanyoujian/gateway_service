@@ -19,7 +19,7 @@ onlinedev:
 
 
 server:
-  port: 9098
+  port: 9088
 spring:
   application:
     name: sign-service
