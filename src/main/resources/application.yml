@@ -1,21 +1,21 @@
 dev1:
-  uri: https://dev1.51zixiu.com:9080/
+  uri: https://xxx:9080/
 dev2:
-  uri: https://dev2.51zixiu.com:9080/
+  uri: https://xxx:9080/
 dev3:
-  uri: https://dev3.51zixiu.com:9080/
+  uri: https://dxxx:9080/
 condev1:
-  uri: https://condev1.51zixiu.com:9080/
+  uri: https://cxxxm:9080/
 condev2:
-  uri: https://condev2.51zixiu.com:9080/
+  uri: https://conxxx.com:9080/
 condev3:
-  uri: https://condev3.51zixiu.com:9080/
+  uri: https://coxxxu.com:9080/
 #master dev
 appdev:
-  uri: https://app.51zixiu.com:9080/
+  uri: https://apxxxcom:9080/
 #online dev
 onlinedev:
-  uri: https://beta.51zixiu.com:9080/
+  uri: https://betxxxiu.com:9080/
 
 
 server:
@@ -24,7 +24,7 @@ spring:
   application:
     name: sign-service
   redis:
-    host: op.51zixiu.com
+    host: 127.0.0.1
     port: 6390
     database: 0
     timeout: 30
